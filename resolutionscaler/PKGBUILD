@@ -13,7 +13,7 @@ license=('GPL') # Assuming a common open-source license
 depends=('xorg-xrandr') # The script likely depends on xrandr for screen manipulation
 makedepends=('git')
 source=("git+https://github.com/Sprunglesonthehub/Resolution-scaling.git")
-sha256sums=('SKIP') # Use SKIP for VCS sources
+sha256sums=('SKIP')
 
 # Function to automatically generate the version based on the latest git commit
 pkgver() {
