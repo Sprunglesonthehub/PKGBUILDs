@@ -6,21 +6,20 @@
 pkgname=resolutionscaler-git
 pkgver=r0.a2f43d3 # Placeholder, updated dynamically by pkgver()
 pkgdesc="A script to handle resolution scaling, pulled directly from a GitHub repository."
-pkgrel=1
 arch=('any')
 url="https://github.com/Sprunglesonthehub/Resolution-scaling"
 license=('GPL') # Assuming a common open-source license
 depends=('xorg-xrandr') # The script likely depends on xrandr for screen manipulation
 makedepends=('git')
 source=("git+https://github.com/Sprunglesonthehub/Resolution-scaling.git")
-sha256sums=('SKIP')
+sha256sums=('SKIP') # Use SKIP for VCS sources
 
 # Function to automatically generate the version based on the latest git commit
+# This uses the revision count (rX) and the short commit hash (Y) for a non-empty, reliable version string.
 pkgver() {
   cd "$srcdir/Resolution-scaling"
-  git describe --long --tags | sed 's/\([^-]*-\)g/r\1 &/' | sed 's/-/./g'
-  # Fallback:
-  # printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  # Output format: r<commit_count>.<short_hash> (e.g., r123.a2f43d3)
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 package() {
