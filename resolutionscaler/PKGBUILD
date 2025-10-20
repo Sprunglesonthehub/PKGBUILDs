@@ -1,0 +1,36 @@
+# PKGBUILD for Resolution-scaling script from Git
+#
+# This package installs the 'resolutionscaler' script and creates a symlink
+# so it can be executed via the 'resolution' command.
+
+pkgname=resolutionscaler-git
+pkgver=r0.a2f43d3 # Placeholder, updated dynamically by pkgver()
+pkgdesc="A script to handle resolution scaling, pulled directly from a GitHub repository."
+arch=('any')
+url="https://github.com/Sprunglesonthehub/Resolution-scaling"
+license=('GPL') # Assuming a common open-source license
+depends=('xorg-xrandr') # The script likely depends on xrandr for screen manipulation
+makedepends=('git')
+source=("git+https://github.com/Sprunglesonthehub/Resolution-scaling.git")
+sha256sums=('SKIP') # Use SKIP for VCS sources
+
+# Function to automatically generate the version based on the latest git commit
+pkgver() {
+  cd "$srcdir/Resolution-scaling"
+  git describe --long --tags | sed 's/\([^-]*-\)g/r\1 &/' | sed 's/-/./g'
+  # Fallback:
+  # printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+  # Change to the source directory where the git repository was cloned
+  cd "$srcdir/Resolution-scaling"
+
+  # Install the main script file.
+  # -D: Create the destination directories if they do not exist.
+  # -m755: Set permissions to 755 (owner read/write/execute, others read/execute).
+  install -Dm755 resolutionscaler "$pkgdir/usr/bin/resolutionscaler"
+
+  # Create a symbolic link so the user can run the script using the "resolution" command
+  ln -s resolutionscaler "$pkgdir/usr/bin/resolution"
+}
